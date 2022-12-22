@@ -13,16 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.doodle.broker.server.single;
+package org.doodle.broker.server;
 
-import org.doodle.broker.server.EnableBrokerServer;
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
+import java.lang.annotation.*;
+import org.doodle.broker.server.config.BrokerServerMarkerConfiguration;
+import org.springframework.context.annotation.Import;
 
-@EnableBrokerServer
-@SpringBootApplication
-public class BrokerServerApplication {
-  public static void main(String[] args) {
-    SpringApplication.run(BrokerServerApplication.class, args);
-  }
-}
+@Target(ElementType.TYPE)
+@Retention(RetentionPolicy.RUNTIME)
+@Documented
+@Import(BrokerServerMarkerConfiguration.class)
+public @interface EnableBrokerServer {}

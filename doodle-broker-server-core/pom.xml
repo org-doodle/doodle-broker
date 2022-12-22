@@ -10,23 +10,20 @@
     <version>0.0.1-SNAPSHOT</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
-  <artifactId>doodle-broker-server</artifactId>
+  <artifactId>doodle-broker-server-core</artifactId>
   <properties>
     <spotless.skip>false</spotless.skip>
-    <start-class>org.doodle.broker.server.single.BrokerServerApplication</start-class>
   </properties>
   <dependencies>
     <dependency>
-      <groupId>org.doodle</groupId>
-      <artifactId>doodle-starter-broker-server</artifactId>
+      <groupId>org.projectlombok</groupId>
+      <artifactId>lombok</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter</artifactId>
+      <optional>true</optional>
     </dependency>
   </dependencies>
-  <build>
-    <plugins>
-      <plugin>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-maven-plugin</artifactId>
-      </plugin>
-    </plugins>
-  </build>
 </project>

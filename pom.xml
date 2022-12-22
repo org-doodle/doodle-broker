@@ -15,5 +15,7 @@
   <modules>
     <module>doodle-broker-bom</module>
     <module>doodle-broker-server</module>
+    <module>doodle-broker-server-core</module>
+    <module>doodle-starter-broker-server</module>
   </modules>
 </project>
