@@ -6,25 +6,16 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>org.doodle</groupId>
-    <artifactId>doodle-build</artifactId>
+    <artifactId>doodle-broker-build</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <relativePath/>
+    <relativePath>doodle-broker-build/pom.xml</relativePath>
   </parent>
   <artifactId>doodle-broker</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
   <packaging>pom</packaging>
   <modules>
     <module>doodle-broker-bom</module>
+    <module>doodle-broker-build</module>
+    <module>doodle-broker-parent</module>
+    <module>doodle-broker-server</module>
   </modules>
-  <dependencyManagement>
-    <dependencies>
-      <dependency>
-        <groupId>org.doodle</groupId>
-        <artifactId>doodle-broker-bom</artifactId>
-        <version>${project.version}</version>
-        <type>pom</type>
-        <scope>import</scope>
-      </dependency>
-    </dependencies>
-  </dependencyManagement>
 </project>
