@@ -6,11 +6,14 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>org.doodle</groupId>
-    <artifactId>doodle-broker-parent</artifactId>
+    <artifactId>doodle-broker</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <relativePath>../doodle-broker-parent/pom.xml</relativePath>
+    <relativePath>../pom.xml</relativePath>
   </parent>
   <artifactId>doodle-broker-server</artifactId>
+  <properties>
+    <spotless.skip>false</spotless.skip>
+  </properties>
   <dependencies>
     <dependency>
       <groupId>org.springframework.boot</groupId>
