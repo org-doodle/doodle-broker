@@ -23,6 +23,7 @@ jobs:
           path: org-doodle/doodle-build
       - name: Install doodle-build
         run: ./mvnw install
+        with:
           working-directory: org-doodle/doodle-build
 
       - name: Checkout coding style
