@@ -15,7 +15,18 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
           cache: 'maven'
+
+      - name: Checkout doodle-build
+        uses: actions/checkout@v3
+        with:
+          repository: org-doodle/doodle-build
+          path: org-doodle/doodle-build
+      - name: Install doodle-build
+        run: ./mvnw install
+          working-directory: org-doodle/doodle-build
+
       - name: Checkout coding style
         run: ./mvnw spotless:check
+
       - name: Build with Maven
-        run: ./mvnw clean package -B
+        run: ./mvnw package -B
