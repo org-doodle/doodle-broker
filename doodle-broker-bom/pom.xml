@@ -13,8 +13,18 @@
   <artifactId>doodle-broker-bom</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   <packaging>pom</packaging>
+  <properties>
+    <doodle-boot.version>0.0.1-SNAPSHOT</doodle-boot.version>
+  </properties>
   <dependencyManagement>
     <dependencies>
+      <dependency>
+        <groupId>org.doodle</groupId>
+        <artifactId>doodle-boot-bom</artifactId>
+        <version>${doodle-boot.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
       <dependency>
         <groupId>org.doodle</groupId>
         <artifactId>doodle-broker-client</artifactId>
