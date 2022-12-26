@@ -24,6 +24,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.boot.autoconfigure.rsocket.RSocketRequesterAutoConfiguration;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Scope;
 import org.springframework.messaging.rsocket.RSocketRequester;
 
 @SuppressWarnings("unused")
@@ -34,10 +35,15 @@ import org.springframework.messaging.rsocket.RSocketRequester;
 public class BrokerClientAutoConfiguration {
 
   @Bean
+  @Scope("prototype")
   @ConditionalOnMissingBean
   public BrokerRSocketRequesterBuilder brokerRSocketRequesterBuilder(
-      ObjectProvider<RSocketRequester.Builder> builderProvider) {
-    return BrokerRSocketRequesterBuilder.builder(
-        builderProvider.getIfUnique(RSocketRequester::builder));
+      ObjectProvider<RSocketRequester.Builder> builderProvider,
+      ObjectProvider<BrokerRSocketRequesterBuilder.Customizer> customizerProvider) {
+    BrokerRSocketRequesterBuilder builder =
+        BrokerRSocketRequesterBuilder.builder(
+            builderProvider.getIfUnique(RSocketRequester::builder));
+    customizerProvider.orderedStream().forEach(c -> c.customize(builder));
+    return builder;
   }
 }

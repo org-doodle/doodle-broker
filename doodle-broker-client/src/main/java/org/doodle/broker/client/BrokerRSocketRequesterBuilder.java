@@ -18,6 +18,10 @@ package org.doodle.broker.client;
 import org.springframework.messaging.rsocket.RSocketRequester;
 
 public interface BrokerRSocketRequesterBuilder extends RSocketRequester.Builder {
+  @FunctionalInterface
+  interface Customizer {
+    void customize(BrokerRSocketRequesterBuilder builder);
+  }
 
   static BrokerRSocketRequesterBuilder builder(RSocketRequester.Builder builder) {
     return new DefaultBrokerRSocketRequesterBuilder(builder);
