@@ -16,6 +16,7 @@
 package org.doodle.broker.client.config;
 
 import org.doodle.broker.client.BrokerRSocketRequesterBuilder;
+import org.doodle.broker.frame.config.BrokerFrameAutoConfiguration;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
@@ -28,7 +29,9 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.messaging.rsocket.RSocketRequester;
 
 @SuppressWarnings("unused")
-@AutoConfiguration(after = RSocketRequesterAutoConfiguration.class)
+@AutoConfiguration(
+    after = RSocketRequesterAutoConfiguration.class,
+    before = BrokerFrameAutoConfiguration.class)
 @ConditionalOnBean(BrokerClientMarkerConfiguration.Marker.class)
 @ConditionalOnClass({RSocketRequester.class})
 @EnableConfigurationProperties(BrokerClientProperties.class)

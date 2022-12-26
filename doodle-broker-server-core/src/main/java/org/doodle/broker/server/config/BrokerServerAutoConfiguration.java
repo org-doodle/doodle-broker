@@ -15,11 +15,22 @@
  */
 package org.doodle.broker.server.config;
 
-import org.springframework.boot.SpringBootConfiguration;
+import org.doodle.broker.frame.config.BrokerFrameAutoConfiguration;
+import org.doodle.broker.server.BrokerServerAcceptor;
+import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.annotation.Bean;
 
-@SpringBootConfiguration(proxyBeanMethods = false)
+@AutoConfiguration(after = BrokerFrameAutoConfiguration.class)
 @ConditionalOnBean(BrokerServerMarkerConfiguration.Marker.class)
 @EnableConfigurationProperties(BrokerServerProperties.class)
-public class BrokerServerAutoConfiguration {}
+public class BrokerServerAutoConfiguration {
+
+  @Bean
+  @ConditionalOnMissingBean
+  public BrokerServerAcceptor brokerServerAcceptor() {
+    return new BrokerServerAcceptor(null);
+  }
+}
