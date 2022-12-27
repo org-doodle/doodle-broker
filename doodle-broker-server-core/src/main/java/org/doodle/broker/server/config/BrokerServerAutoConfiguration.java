@@ -20,10 +20,15 @@ import org.doodle.broker.frame.BrokerFrameExtractor;
 import org.doodle.broker.frame.BrokerFrameMimeTypes;
 import org.doodle.broker.frame.config.BrokerFrameAutoConfiguration;
 import org.doodle.broker.server.BrokerServerAcceptor;
+import org.doodle.broker.server.BrokerServerFactory;
+import org.doodle.broker.server.context.BrokerServerBootstrap;
+import org.doodle.broker.server.netty.NettyBrokerServerFactory;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.boot.context.properties.PropertyMapper;
+import org.springframework.boot.rsocket.netty.NettyRSocketServerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.messaging.rsocket.DefaultMetadataExtractor;
 import org.springframework.messaging.rsocket.MetadataExtractor;
@@ -54,5 +59,25 @@ public class BrokerServerAutoConfiguration {
   @ConditionalOnMissingBean
   public BrokerServerAcceptor brokerServerAcceptor(BrokerFrameExtractor frameExtractor) {
     return new BrokerServerAcceptor(frameExtractor);
+  }
+
+  @Bean
+  @ConditionalOnMissingBean
+  public BrokerServerFactory brokerServerFactory(BrokerServerProperties properties) {
+    NettyRSocketServerFactory serverFactory = new NettyRSocketServerFactory();
+    serverFactory.setTransport(properties.getServer().getTransport());
+    PropertyMapper map = PropertyMapper.get().alwaysApplyingWhenNonNull();
+    map.from(properties.getServer().getAddress()).to(serverFactory::setAddress);
+    map.from(properties.getServer().getPort()).to(serverFactory::setPort);
+    map.from(properties.getServer().getFragmentSize()).to(serverFactory::setFragmentSize);
+    map.from(properties.getServer().getSsl()).to(serverFactory::setSsl);
+    return new NettyBrokerServerFactory(serverFactory);
+  }
+
+  @Bean
+  @ConditionalOnMissingBean
+  public BrokerServerBootstrap brokerServerBootstrap(
+      BrokerServerFactory serverFactory, BrokerServerAcceptor serverAcceptor) {
+    return new BrokerServerBootstrap(serverFactory, serverAcceptor);
   }
 }

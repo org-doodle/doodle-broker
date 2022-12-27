@@ -13,18 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.doodle.broker.server.config;
+package org.doodle.broker.server.context;
 
-import lombok.Data;
-import org.springframework.boot.autoconfigure.rsocket.RSocketProperties;
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.boot.context.properties.NestedConfigurationProperty;
+import org.doodle.broker.server.BrokerServer;
+import org.springframework.context.ApplicationEvent;
 
-@Data
-@ConfigurationProperties(prefix = BrokerServerProperties.PREFIX)
-public class BrokerServerProperties {
-  public static final String PREFIX = "doodle.broker.server";
+public class BrokerServerInitializedEvent extends ApplicationEvent {
 
-  @NestedConfigurationProperty
-  private final RSocketProperties.Server server = new RSocketProperties.Server();
+  public BrokerServerInitializedEvent(BrokerServer brokerServer) {
+    super(brokerServer);
+  }
+
+  public BrokerServer getServer() {
+    return getSource();
+  }
+
+  @Override
+  public BrokerServer getSource() {
+    return (BrokerServer) super.getSource();
+  }
 }

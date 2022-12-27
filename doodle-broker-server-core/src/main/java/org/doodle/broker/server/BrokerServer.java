@@ -13,18 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.doodle.broker.server.config;
+package org.doodle.broker.server;
 
-import lombok.Data;
-import org.springframework.boot.autoconfigure.rsocket.RSocketProperties;
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.boot.context.properties.NestedConfigurationProperty;
+import org.springframework.boot.rsocket.server.RSocketServer;
 
-@Data
-@ConfigurationProperties(prefix = BrokerServerProperties.PREFIX)
-public class BrokerServerProperties {
-  public static final String PREFIX = "doodle.broker.server";
-
-  @NestedConfigurationProperty
-  private final RSocketProperties.Server server = new RSocketProperties.Server();
-}
+public interface BrokerServer extends RSocketServer {}
