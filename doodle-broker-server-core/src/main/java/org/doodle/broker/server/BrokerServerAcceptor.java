@@ -19,10 +19,13 @@ import io.rsocket.ConnectionSetupPayload;
 import io.rsocket.RSocket;
 import io.rsocket.SocketAcceptor;
 import java.util.Objects;
+import lombok.extern.slf4j.Slf4j;
 import org.doodle.broker.frame.BrokerFrame;
 import org.doodle.broker.frame.BrokerFrameExtractor;
+import org.doodle.broker.frame.RouteSetup;
 import reactor.core.publisher.Mono;
 
+@Slf4j
 public class BrokerServerAcceptor implements SocketAcceptor {
 
   private final BrokerFrameExtractor frameExtractor;
@@ -33,8 +36,16 @@ public class BrokerServerAcceptor implements SocketAcceptor {
 
   @Override
   public Mono<RSocket> accept(ConnectionSetupPayload setupPayload, RSocket rSocket) {
-    BrokerFrame brokerFrame = frameExtractor.apply(setupPayload);
+    try {
+      BrokerFrame brokerFrame = frameExtractor.apply(setupPayload);
+      if (brokerFrame.getKindCase() == BrokerFrame.KindCase.SETUP) {
+        RouteSetup routeSetup = brokerFrame.getSetup();
+      }
 
-    return Mono.empty();
+      return Mono.empty();
+    } catch (Throwable cause) {
+      log.error("Error accepting setup", cause);
+      return Mono.error(cause);
+    }
   }
 }

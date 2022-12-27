@@ -13,42 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package org.doodle.broker.core;
 
-syntax = "proto3";
+import io.rsocket.RSocket;
+import java.util.List;
+import org.doodle.broker.frame.Tags;
 
-package doodle.broker.frame;
+@FunctionalInterface
+public interface RSocketQuery {
 
-option java_multiple_files = true;
-option java_package = "org.doodle.broker.frame";
-option java_outer_classname = "BrokerFrameProto";
-
-message UUID {
-  sfixed64 lsb = 1;
-  sfixed64  msb = 2;
-}
-
-message Tags {
-  map<string, string> tag = 1;
-}
-
-message RouteSetup {
-  UUID routeId = 1;
-  Tags tags = 2;
-}
-
-enum RoutingType {
-  UNICAST = 0;
-  MULTICAST = 1;
-}
-
-message Address {
-  RoutingType routingType = 1;
-  Tags tags = 2;
-}
-
-message BrokerFrame {
-  oneof kind {
-    RouteSetup setup = 1;
-    Address address = 2;
-  }
+  List<RSocket> query(Tags tags);
 }
