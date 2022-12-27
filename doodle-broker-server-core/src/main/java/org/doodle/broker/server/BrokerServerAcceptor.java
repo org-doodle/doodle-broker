@@ -34,6 +34,7 @@ public class BrokerServerAcceptor implements SocketAcceptor {
   @Override
   public Mono<RSocket> accept(ConnectionSetupPayload setupPayload, RSocket rSocket) {
     BrokerFrame brokerFrame = frameExtractor.apply(setupPayload);
+
     return Mono.empty();
   }
 }

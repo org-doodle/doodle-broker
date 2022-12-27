@@ -16,8 +16,11 @@
 package org.doodle.broker.frame;
 
 import io.rsocket.ConnectionSetupPayload;
+import java.util.Map;
 import java.util.function.Function;
+import org.springframework.messaging.rsocket.MetadataExtractor;
 import org.springframework.messaging.rsocket.RSocketStrategies;
+import org.springframework.util.MimeType;
 
 public class BrokerFrameExtractor implements Function<ConnectionSetupPayload, BrokerFrame> {
 
@@ -26,6 +29,12 @@ public class BrokerFrameExtractor implements Function<ConnectionSetupPayload, Br
   public BrokerFrameExtractor(RSocketStrategies strategies) {
     this.frameExtractor =
         (setupPayload) -> {
+          MimeType mimeType = MimeType.valueOf(setupPayload.metadataMimeType());
+          MetadataExtractor metadataExtractor = strategies.metadataExtractor();
+          Map<String, Object> setupMetadata = metadataExtractor.extract(setupPayload, mimeType);
+          if (setupMetadata.containsKey(BrokerFrameMimeTypes.BROKER_FRAME_METADATA_KEY)) {
+            return (BrokerFrame) setupMetadata.get(BrokerFrameMimeTypes.BROKER_FRAME_METADATA_KEY);
+          }
           return null;
         };
   }

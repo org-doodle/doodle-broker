@@ -15,6 +15,9 @@
  */
 package org.doodle.broker.server.config;
 
+import org.doodle.broker.frame.BrokerFrame;
+import org.doodle.broker.frame.BrokerFrameExtractor;
+import org.doodle.broker.frame.BrokerFrameMimeTypes;
 import org.doodle.broker.frame.config.BrokerFrameAutoConfiguration;
 import org.doodle.broker.server.BrokerServerAcceptor;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
@@ -22,15 +25,34 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
+import org.springframework.messaging.rsocket.DefaultMetadataExtractor;
+import org.springframework.messaging.rsocket.MetadataExtractor;
+import org.springframework.messaging.rsocket.RSocketStrategies;
 
 @AutoConfiguration(after = BrokerFrameAutoConfiguration.class)
 @ConditionalOnBean(BrokerServerMarkerConfiguration.Marker.class)
 @EnableConfigurationProperties(BrokerServerProperties.class)
 public class BrokerServerAutoConfiguration {
 
+  public BrokerServerAutoConfiguration(RSocketStrategies strategies) {
+    MetadataExtractor metadataExtractor = strategies.metadataExtractor();
+    if (metadataExtractor instanceof DefaultMetadataExtractor extractor) {
+      extractor.metadataToExtract(
+          BrokerFrameMimeTypes.BROKER_FRAME_MIME_TYPE,
+          BrokerFrame.class,
+          BrokerFrameMimeTypes.BROKER_FRAME_METADATA_KEY);
+    }
+  }
+
   @Bean
   @ConditionalOnMissingBean
-  public BrokerServerAcceptor brokerServerAcceptor() {
-    return new BrokerServerAcceptor(null);
+  public BrokerFrameExtractor brokerFrameExtractor(RSocketStrategies strategies) {
+    return new BrokerFrameExtractor(strategies);
+  }
+
+  @Bean
+  @ConditionalOnMissingBean
+  public BrokerServerAcceptor brokerServerAcceptor(BrokerFrameExtractor frameExtractor) {
+    return new BrokerServerAcceptor(frameExtractor);
   }
 }

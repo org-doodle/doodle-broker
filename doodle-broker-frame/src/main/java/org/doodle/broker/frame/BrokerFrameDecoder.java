@@ -15,6 +15,31 @@
  */
 package org.doodle.broker.frame;
 
+import com.google.protobuf.Message;
+import java.util.Map;
+import org.reactivestreams.Publisher;
+import org.springframework.core.ResolvableType;
+import org.springframework.core.codec.AbstractDecoder;
+import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.http.codec.protobuf.ProtobufDecoder;
+import org.springframework.util.MimeType;
+import reactor.core.publisher.Flux;
 
-public class BrokerFrameDecoder extends ProtobufDecoder {}
+public class BrokerFrameDecoder extends AbstractDecoder<Message> {
+
+  private final ProtobufDecoder decoder;
+
+  public BrokerFrameDecoder() {
+    super(BrokerFrameMimeTypes.BROKER_FRAME_MIME_TYPE);
+    this.decoder = new ProtobufDecoder();
+  }
+
+  @Override
+  public Flux<Message> decode(
+      Publisher<DataBuffer> inputStream,
+      ResolvableType elementType,
+      MimeType mimeType,
+      Map<String, Object> hints) {
+    return this.decoder.decode(inputStream, elementType, mimeType, hints);
+  }
+}
