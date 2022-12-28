@@ -43,4 +43,14 @@ public class BrokerFrameEncoder extends AbstractEncoder<Message> {
       Map<String, Object> hints) {
     return this.encoder.encode(inputStream, bufferFactory, elementType, mimeType, hints);
   }
+
+  @Override
+  public DataBuffer encodeValue(
+      Message value,
+      DataBufferFactory bufferFactory,
+      ResolvableType valueType,
+      MimeType mimeType,
+      Map<String, Object> hints) {
+    return this.encoder.encodeValue(value, bufferFactory, valueType, mimeType, hints);
+  }
 }

@@ -24,6 +24,7 @@ import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.http.codec.protobuf.ProtobufDecoder;
 import org.springframework.util.MimeType;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 public class BrokerFrameDecoder extends AbstractDecoder<Message> {
 
@@ -41,5 +42,14 @@ public class BrokerFrameDecoder extends AbstractDecoder<Message> {
       MimeType mimeType,
       Map<String, Object> hints) {
     return this.decoder.decode(inputStream, elementType, mimeType, hints);
+  }
+
+  @Override
+  public Mono<Message> decodeToMono(
+      Publisher<DataBuffer> inputStream,
+      ResolvableType elementType,
+      MimeType mimeType,
+      Map<String, Object> hints) {
+    return this.decoder.decodeToMono(inputStream, elementType, mimeType, hints);
   }
 }
