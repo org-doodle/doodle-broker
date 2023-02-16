@@ -25,6 +25,15 @@ jobs:
         run: ./mvnw install
         working-directory: org-doodle/doodle-build
 
+      - name: Checkout doodle-design
+        uses: actions/checkout@v3
+        with:
+          repository: org-doodle/doodle-design
+          path: org-doodle/doodle-design
+      - name: Install doodle-design
+        run: ./mvnw install
+        working-directory: org-doodle/doodle-design
+
       - name: Checkout doodle-boot
         uses: actions/checkout@v3
         with:
